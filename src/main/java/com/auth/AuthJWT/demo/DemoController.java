@@ -16,8 +16,4 @@ public class DemoController {
         return ResponseEntity.ok("Hello World!");
     }
 
-    @GetMapping("/home")
-    public ResponseEntity<String> home() {
-        return ResponseEntity.ok("Home page");
-    }
 }
