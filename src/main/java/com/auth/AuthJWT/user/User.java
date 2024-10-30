@@ -8,10 +8,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -19,15 +18,18 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
+public class User implements UserDetails {
 
-public class User implements UserDetails{
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id; // Changed to UUID
+
     private String firstname;
     private String lastname;
+
     @Column(unique = true)
     private String email;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
