@@ -2,6 +2,9 @@ package com.auth.AuthJWT.auth;
 
 
 import com.auth.AuthJWT.config.JwtService;
+import com.auth.AuthJWT.token.Token;
+import com.auth.AuthJWT.token.TokenRepository;
+import com.auth.AuthJWT.token.TokenType;
 import com.auth.AuthJWT.user.Role;
 import com.auth.AuthJWT.user.User;
 import com.auth.AuthJWT.user.UserRepository;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
    private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
    private final PasswordEncoder passwordEncoder;
    private final JwtService jwtService;
    private final AuthenticationManager authenticationManager;
@@ -34,14 +38,28 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
 
-        userRepository.save(user);
+        var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
+
+        saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .id(user.getId())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
-                .token(jwtToken).build();
+                .token(jwtToken)
+                .role(user.getRole())
+                .build();
+    }
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -60,6 +78,7 @@ public class AuthenticationService {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
+                .role(user.getRole())
                 .token(jwtToken).build();
     }
 }

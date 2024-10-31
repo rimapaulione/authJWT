@@ -1,5 +1,6 @@
 package com.auth.AuthJWT.auth;
 
+import com.auth.AuthJWT.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,5 @@ public class AuthenticationResponse {
     private String firstname;
     private String lastname;
     private String email;
+    private Role role;
 }
