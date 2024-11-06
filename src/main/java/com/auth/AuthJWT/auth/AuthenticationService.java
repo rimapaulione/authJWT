@@ -8,6 +8,8 @@ import com.auth.AuthJWT.token.TokenType;
 import com.auth.AuthJWT.user.Role;
 import com.auth.AuthJWT.user.User;
 import com.auth.AuthJWT.user.UserRepository;
+import com.auth.AuthJWT.verification.VerificationToken;
+import com.auth.AuthJWT.verification.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,35 +25,39 @@ public class AuthenticationService {
    private final PasswordEncoder passwordEncoder;
    private final JwtService jwtService;
    private final AuthenticationManager authenticationManager;
+   private final VerificationTokenService verificationTokenService;
 
     public AuthenticationResponse register(RegisterRequest request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already in use: " + request.getEmail());
         }
-
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .verified(null)
                 .build();
 
         var savedUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
 
-        saveUserToken(savedUser, jwtToken);
+        VerificationToken verificationToken = verificationTokenService.createToken(savedUser.getEmail());
+
+//SEND EMAIL
+
+
+
         return AuthenticationResponse.builder()
                 .id(user.getId())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
-                .token(jwtToken)
+                .token(null)
                 .role(user.getRole())
                 .build();
     }
-
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -63,6 +69,14 @@ public class AuthenticationService {
 
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+
+        if (user.getVerified() == null) {
+            throw new IllegalStateException("User is not verified yet.");
+        }
+
+        verificationTokenService.deleteExpiredTokensByEmail(user.getEmail());
+
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
@@ -74,7 +88,6 @@ public class AuthenticationService {
                 .role(user.getRole())
                 .token(jwtToken).build();
     }
-
 
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
