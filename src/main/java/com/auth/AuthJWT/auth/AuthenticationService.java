@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
    private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
+   private final TokenRepository tokenRepository;
    private final PasswordEncoder passwordEncoder;
    private final JwtService jwtService;
    private final AuthenticationManager authenticationManager;
@@ -47,8 +47,6 @@ public class AuthenticationService {
 
 //SEND EMAIL
 
-
-
         return AuthenticationResponse.builder()
                 .id(user.getId())
                 .firstname(user.getFirstname())
@@ -56,6 +54,7 @@ public class AuthenticationService {
                 .email(user.getEmail())
                 .token(null)
                 .role(user.getRole())
+                .verification(verificationToken.getToken())
                 .build();
     }
 
@@ -72,10 +71,12 @@ public class AuthenticationService {
 
 
         if (user.getVerified() == null) {
-            throw new IllegalStateException("User is not verified yet.");
+            VerificationToken verificationToken = verificationTokenService.createToken(user.getEmail());
+            var test = verificationToken.getToken();
+            throw new IllegalArgumentException("User is not verified yet."  + test);
+
         }
 
-        verificationTokenService.deleteExpiredTokensByEmail(user.getEmail());
 
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
