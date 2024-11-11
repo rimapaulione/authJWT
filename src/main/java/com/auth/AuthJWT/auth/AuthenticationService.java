@@ -67,16 +67,13 @@ public class AuthenticationService {
         );
 
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+       .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         if (user.getVerified() == null) {
             VerificationToken verificationToken = verificationTokenService.createToken(user.getEmail());
-            var test = verificationToken.getToken();
-            throw new IllegalArgumentException("User is not verified yet."  + test);
-
+            var verToken = verificationToken.getToken();
+            throw new IllegalArgumentException(verToken);
         }
-
 
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
