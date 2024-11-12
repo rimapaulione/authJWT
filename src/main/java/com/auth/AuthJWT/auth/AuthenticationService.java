@@ -72,7 +72,7 @@ public class AuthenticationService {
         if (user.getVerified() == null) {
             VerificationToken verificationToken = verificationTokenService.createToken(user.getEmail());
             var verToken = verificationToken.getToken();
-            throw new IllegalArgumentException(verToken);
+            throw new IllegalArgumentException("Not verified " + verToken);
         }
 
         var jwtToken = jwtService.generateToken(user);
@@ -108,4 +108,15 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
+
+
+
+    public LoginResponse login(LoginRequest request) {
+
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return LoginResponse.builder().verified(user.getVerified()).build();
+    }
+
 }
