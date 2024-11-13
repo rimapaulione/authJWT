@@ -2,6 +2,8 @@ package com.auth.AuthJWT.auth;
 
 
 import com.auth.AuthJWT.config.JwtService;
+import com.auth.AuthJWT.exeption.UserNotFoundException;
+import com.auth.AuthJWT.exeption.UserNotVerifiedException;
 import com.auth.AuthJWT.token.Token;
 import com.auth.AuthJWT.token.TokenRepository;
 import com.auth.AuthJWT.token.TokenType;
@@ -11,11 +13,13 @@ import com.auth.AuthJWT.user.UserRepository;
 import com.auth.AuthJWT.verification.VerificationToken;
 import com.auth.AuthJWT.verification.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +49,6 @@ public class AuthenticationService {
 
         VerificationToken verificationToken = verificationTokenService.createToken(savedUser.getEmail());
 
-//SEND EMAIL
-
         return AuthenticationResponse.builder()
                 .id(user.getId())
                 .firstname(user.getFirstname())
@@ -59,20 +61,21 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
+       authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
 
+
         var user = userRepository.findByEmail(request.getEmail())
-       .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
 
         if (user.getVerified() == null) {
             VerificationToken verificationToken = verificationTokenService.createToken(user.getEmail());
             var verToken = verificationToken.getToken();
-            throw new IllegalArgumentException("Not verified " + verToken);
+            throw new UserNotVerifiedException("Not verified " + verToken + user.getEmail());
         }
 
         var jwtToken = jwtService.generateToken(user);
