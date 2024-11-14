@@ -75,7 +75,7 @@ public class AuthenticationService {
         if (user.getVerified() == null) {
             VerificationToken verificationToken = verificationTokenService.createToken(user.getEmail());
             var verToken = verificationToken.getToken();
-            throw new UserNotVerifiedException("Not verified " + verToken + user.getEmail());
+            throw new UserNotVerifiedException("Not verified " + verToken + " " + user.getEmail());
         }
 
         var jwtToken = jwtService.generateToken(user);

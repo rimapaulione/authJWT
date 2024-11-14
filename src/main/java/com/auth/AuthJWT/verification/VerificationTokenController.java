@@ -30,19 +30,10 @@ public class VerificationTokenController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<Map<String, String>> verifyToken(
+    public ResponseEntity<VerificationResponse> verifyToken(
             @RequestParam String token) {
-
-        boolean isVerified = verificationTokenService.verifyToken(token);
-        Map<String, String> response = new HashMap<>();
-
-        if (isVerified) {
-            response.put("message", "User verified successfully.");
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("message", "Invalid or expired token.");
-            return ResponseEntity.status(400).body(response);
-        }
+        return ResponseEntity.ok(verificationTokenService.verifyToken(token));
     }
+
 
 }
