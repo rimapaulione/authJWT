@@ -1,5 +1,6 @@
 package com.auth.AuthJWT.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +41,12 @@ public class SecurityConfiguration {
                 .logout(logout ->
                         logout.logoutUrl("/api/auth/logout")
                                 .addLogoutHandler(logoutHandler)
-                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                                .logoutSuccessHandler((request, response, authentication) -> {
+                                    SecurityContextHolder.clearContext();
+                                    response.setContentType("application/json");
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                    response.getWriter().write("{\"message\": \"Logout successful\"}");
+                                })
                 );
 
 
