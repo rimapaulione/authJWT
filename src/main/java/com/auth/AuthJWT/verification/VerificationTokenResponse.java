@@ -1,6 +1,5 @@
 package com.auth.AuthJWT.verification;
 
-import com.auth.AuthJWT.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VerificationResponse {
+public class VerificationTokenResponse {
     private UUID id;
     private String email;
     private LocalDateTime verified;

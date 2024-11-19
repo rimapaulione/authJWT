@@ -1,14 +1,11 @@
 package com.auth.AuthJWT.verification;
 
-import com.auth.AuthJWT.user.User;
 import com.auth.AuthJWT.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +19,7 @@ public class VerificationTokenController {
     public ResponseEntity<Map<String, String>> createVerificationToken(
             @RequestParam String email) {
 
-       VerificationToken token = verificationTokenService.createToken(email);
+       VerificationToken token = verificationTokenService.createVerificationToken(email);
        Map<String, String> response = new HashMap<>();
        response.put("token", token.getToken());
 
@@ -30,9 +27,9 @@ public class VerificationTokenController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<VerificationResponse> verifyToken(
+    public ResponseEntity<VerificationTokenResponse> verifyToken(
             @RequestParam String token) {
-        return ResponseEntity.ok(verificationTokenService.verifyToken(token));
+        return ResponseEntity.ok(verificationTokenService.verifyVerificationToken(token));
     }
 
 

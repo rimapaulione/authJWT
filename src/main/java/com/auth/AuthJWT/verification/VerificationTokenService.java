@@ -6,8 +6,6 @@ import com.auth.AuthJWT.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +16,7 @@ public class VerificationTokenService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final UserRepository userRepository;
 
-    public VerificationToken createToken(String email) {
+    public VerificationToken createVerificationToken(String email) {
         verificationTokenRepository.findByEmail(email)
                 .ifPresent(verificationTokenRepository::delete);
 
@@ -30,7 +28,7 @@ public class VerificationTokenService {
 
     }
 
-    public VerificationResponse verifyToken(String tokenValue) {
+    public VerificationTokenResponse verifyVerificationToken(String tokenValue) {
         Optional<VerificationToken> tokenOpt = verificationTokenRepository.findByToken(tokenValue);
         if (tokenOpt.isEmpty()) {
             throw new IllegalArgumentException("Invalid or expired token.");
@@ -53,7 +51,7 @@ public class VerificationTokenService {
 
         verificationTokenRepository.delete(token);
 
-        return VerificationResponse.builder()
+        return VerificationTokenResponse.builder()
                 .verified(user.getVerified())
                 .id(user.getId())
                 .email(user.getEmail())

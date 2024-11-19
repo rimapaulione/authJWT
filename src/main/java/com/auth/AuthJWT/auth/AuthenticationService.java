@@ -13,13 +13,11 @@ import com.auth.AuthJWT.user.UserRepository;
 import com.auth.AuthJWT.verification.VerificationToken;
 import com.auth.AuthJWT.verification.VerificationTokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +45,7 @@ public class AuthenticationService {
 
         var savedUser = userRepository.save(user);
 
-        VerificationToken verificationToken = verificationTokenService.createToken(savedUser.getEmail());
+        VerificationToken verificationToken = verificationTokenService.createVerificationToken(savedUser.getEmail());
 
         return AuthenticationResponse.builder()
                 .id(user.getId())
@@ -68,12 +66,11 @@ public class AuthenticationService {
                 )
         );
 
-
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User does not exist"));
 
         if (user.getVerified() == null) {
-            VerificationToken verificationToken = verificationTokenService.createToken(user.getEmail());
+            VerificationToken verificationToken = verificationTokenService.createVerificationToken(user.getEmail());
             var verToken = verificationToken.getToken();
             throw new UserNotVerifiedException("Not verified " + verToken + " " + user.getEmail());
         }
@@ -112,14 +109,12 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-
-
     public LoginResponse login(LoginRequest request) {
-
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+                .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
         return LoginResponse.builder().verified(user.getVerified()).build();
     }
+
+
 
 }
