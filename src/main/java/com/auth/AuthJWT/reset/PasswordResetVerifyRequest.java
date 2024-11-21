@@ -12,5 +12,7 @@ import lombok.NoArgsConstructor;
 public class PasswordResetVerifyRequest {
     private String token;
     private String password;
+    private String oldPassword;
+
 
 }

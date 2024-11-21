@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,10 +54,17 @@ public class PasswordResetService {
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
+
+            if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
+                throw new IllegalArgumentException("Old password is invalid!");
+
+
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             userRepository.save(user);
-        }
-        if(userOpt.isEmpty()){ throw new UserNotFoundException("Invalid or expired token.")}
+        };
+
+
+
             passwordResetRepository.delete(token);
 
         return true;
