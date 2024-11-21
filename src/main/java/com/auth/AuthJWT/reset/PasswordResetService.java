@@ -47,14 +47,16 @@ public class PasswordResetService {
         PasswordResetToken token = tokenOpt.get();
         if (token.getExpires().isBefore(LocalDateTime.now())) {
             passwordResetRepository.delete(token);
-            throw new UserNotFoundException("Invalid or expired token.");
+            throw new IllegalArgumentException("Invalid or expired token.");
         }
         Optional<User> userOpt = userRepository.findByEmail(token.getEmail());
+
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             userRepository.save(user);
         }
+        if(userOpt.isEmpty()){ throw new UserNotFoundException("Invalid or expired token.")}
             passwordResetRepository.delete(token);
 
         return true;
