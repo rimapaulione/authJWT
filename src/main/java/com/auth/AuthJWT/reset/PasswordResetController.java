@@ -1,11 +1,9 @@
 package com.auth.AuthJWT.reset;
 
+import com.auth.AuthJWT.verification.VerificationTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +15,12 @@ public class PasswordResetController {
     @PostMapping("/create")
     public ResponseEntity<PasswordResetResponse> authenticate(
             @RequestBody PasswordResetRequest request){
-        System.out.println(request);
         return ResponseEntity.ok(service.createPasswordResetToken(request));
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verifyToken(
+            @RequestBody PasswordResetVerifyRequest request) {
+        return ResponseEntity.ok(service.verifyPasswordResetToken((request)));
     }
 }

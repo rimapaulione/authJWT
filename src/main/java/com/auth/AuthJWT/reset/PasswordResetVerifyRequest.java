@@ -5,17 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PasswordResetResponse {
+public class PasswordResetVerifyRequest {
+    private String token;
+    private String password;
 
-    private String email;
-    private String passwordResetToken;
-    private LocalDateTime expires;
 }

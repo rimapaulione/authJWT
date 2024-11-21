@@ -24,12 +24,13 @@ public class VerificationTokenService {
         token.setToken(UUID.randomUUID().toString());
         token.setEmail(email);
         token.setExpires(LocalDateTime.now().plusMinutes(2));
-        return verificationTokenRepository.save(token);
 
+        return verificationTokenRepository.save(token);
     }
 
     public VerificationTokenResponse verifyVerificationToken(String tokenValue) {
-        Optional<VerificationToken> tokenOpt = verificationTokenRepository.findByToken(tokenValue);
+        Optional<VerificationToken> tokenOpt = verificationTokenRepository
+                .findByToken(tokenValue);
         if (tokenOpt.isEmpty()) {
             throw new IllegalArgumentException("Invalid or expired token.");
         }
