@@ -22,7 +22,7 @@ public class PasswordResetService {
     public PasswordResetResponse createPasswordResetToken(PasswordResetRequest email) {
         var user = userRepository.findByEmail(email.getEmail())
                 .orElseThrow(() ->
-                        new UserNotFoundException("User does not exist"));
+                        new UserNotFoundException("Email does not exist"));
 
         passwordResetRepository.findByEmail(email.getEmail())
                 .ifPresent(passwordResetRepository::delete);
@@ -58,12 +58,13 @@ public class PasswordResetService {
             if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword()))
                 throw new IllegalArgumentException("Old password is invalid!");
 
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("New password cannot be the same as the old password");
+            }
 
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             userRepository.save(user);
         };
-
-
 
             passwordResetRepository.delete(token);
 
