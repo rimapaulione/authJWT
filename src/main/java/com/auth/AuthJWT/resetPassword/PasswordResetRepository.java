@@ -1,4 +1,4 @@
-package com.auth.AuthJWT.reset;
+package com.auth.AuthJWT.resetPassword;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

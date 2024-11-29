@@ -1,4 +1,4 @@
-package com.auth.AuthJWT.reset;
+package com.auth.AuthJWT.resetPassword;
 
 import com.auth.AuthJWT.exeption.UserNotFoundException;
 import com.auth.AuthJWT.user.User;

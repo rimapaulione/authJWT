@@ -1,6 +1,5 @@
-package com.auth.AuthJWT.reset;
+package com.auth.AuthJWT.resetPassword;
 
-import com.auth.AuthJWT.verification.VerificationTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
