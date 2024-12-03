@@ -17,8 +17,17 @@ public class UserService {
               .orElseThrow(()-> new UserNotFoundException("User does not exist"));
 
 user.setFirstname(request.getNewFirstName());
-
-
        repository.save(user);
+    }
+    public UserByIdResponse getUserById(String request ){
+
+        User user = repository.findById(request)
+                .orElseThrow(()-> new UserNotFoundException("User does not exist"));
+        return UserByIdResponse.builder()
+                .firstname(user.getFirstname())
+                .lastname((user.getLastname()))
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
     }
 }
