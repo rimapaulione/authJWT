@@ -10,7 +10,6 @@ import lombok.Setter;
 @Builder
 public class ChangeNameRequest {
     private String newFirstName;
-    private String newLastName;
     private String email;
 
 }
