@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -20,11 +23,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/getUser")
+    @PostMapping("/user")
     public ResponseEntity<?> userById (
-            @RequestBody String request
+            @RequestBody Map<String, String> request
             ){
-        service.getUserById(request);
-        return ResponseEntity.ok().build();
+        String idString = request.get("id");
+        UUID id = UUID.fromString(idString);
+        return ResponseEntity.ok(service.getUserById(id));
     }
 }

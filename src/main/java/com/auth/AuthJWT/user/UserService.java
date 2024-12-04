@@ -5,6 +5,8 @@ import com.auth.AuthJWT.exeption.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -19,10 +21,11 @@ public class UserService {
 user.setFirstname(request.getNewFirstName());
        repository.save(user);
     }
-    public UserByIdResponse getUserById(String request ){
+    public UserByIdResponse getUserById(UUID id ){
 
-        User user = repository.findById(request)
+        User user = repository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User does not exist"));
+
         return UserByIdResponse.builder()
                 .firstname(user.getFirstname())
                 .lastname((user.getLastname()))

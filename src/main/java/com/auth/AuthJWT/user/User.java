@@ -25,7 +25,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id; // Changed to UUID
+    private UUID id;
 
     private String firstname;
     private String lastname;
