@@ -16,4 +16,5 @@ public class UserByIdResponse {
     private String lastname;
     private String email;
     private Role role;
+
 }

@@ -26,6 +26,7 @@ user.setFirstname(request.getNewFirstName());
         User user = repository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User does not exist"));
 
+
         return UserByIdResponse.builder()
                 .firstname(user.getFirstname())
                 .lastname((user.getLastname()))

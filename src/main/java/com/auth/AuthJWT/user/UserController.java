@@ -16,9 +16,9 @@ public class UserController {
     private final UserService service;
 
     @PatchMapping
-    public ResponseEntity<?> changePassword(
+    public ResponseEntity<?> changeName(
             @RequestBody ChangeNameRequest request
-    ) {
+    ) {System.out.println(request);
         service.changeName(request);
         return ResponseEntity.ok().build();
     }
@@ -27,6 +27,7 @@ public class UserController {
     public ResponseEntity<?> userById (
             @RequestBody Map<String, String> request
             ){
+        System.out.println(request);
         String idString = request.get("id");
         UUID id = UUID.fromString(idString);
         return ResponseEntity.ok(service.getUserById(id));
