@@ -15,7 +15,7 @@ public class UserController {
 
     private final UserService service;
 
-    @PatchMapping
+    @PatchMapping("/user/change")
     public ResponseEntity<?> changeName(
             @RequestBody ChangeNameRequest request
     ) {
@@ -23,7 +23,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/user")
+    @PostMapping("/user/id")
     public ResponseEntity<?> userById (
             @RequestBody Map<String, String> request
             ){

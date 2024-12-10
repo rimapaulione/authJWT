@@ -5,6 +5,7 @@ import com.auth.AuthJWT.exeption.UserNotFoundException;
 import com.auth.AuthJWT.token.Token;
 import com.auth.AuthJWT.token.TokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +18,30 @@ public class UserService {
 
     private final UserRepository repository;
     private  final TokenRepository tokenRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void changeName(ChangeNameRequest request) {
 
       User user = repository.findByEmail(request.getEmail())
               .orElseThrow(()-> new UserNotFoundException("User does not exist"));
 
-user.setFirstname(request.getNewFirstName());
-       repository.save(user);
+        user.setFirstname(request.getNewFirstName());
+        user.setLastname(request.getNewLastName());
+
+       if (request.getOldPassword().isPresent() & request.getNewPassword().isPresent()) {
+
+            String oldPassword = request.getOldPassword().get();
+            String newPassword = request.getNewPassword().get();
+
+            if(!passwordEncoder.matches(oldPassword, user.getPassword()))
+                throw new IllegalArgumentException("Old password is invalid!");
+
+            if (passwordEncoder.matches(newPassword, user.getPassword())) {
+                throw new IllegalArgumentException("New password cannot be the same as the ");
+            }
+            user.setPassword(passwordEncoder.encode(newPassword));
+        }
+        repository.save(user);
     }
 
     public UserByIdResponse getUserById(UUID id ){
