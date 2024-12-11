@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
                 .logout(logout ->
                         logout.logoutUrl("/api/auth/logout")
                                 .addLogoutHandler(logoutHandler)
@@ -49,12 +50,6 @@ public class SecurityConfiguration {
                                     response.setStatus(HttpServletResponse.SC_OK);
                                     response.getWriter().write("{\"message\": \"Logout successful\"}");
                                 })
-                )
-                .exceptionHandling((exceptions) -> exceptions
-                        .defaultAuthenticationEntryPointFor(
-                                customAuthenticationEntryPoint,
-                                request -> true // Apply entry point for all requests
-                        )
                 );
 
 
