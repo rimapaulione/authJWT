@@ -27,6 +27,7 @@ public class UserService {
 
         user.setFirstname(request.getNewFirstName());
         user.setLastname(request.getNewLastName());
+        user.setRole(request.getRole());
 
        if (request.getOldPassword().isPresent() & request.getNewPassword().isPresent()) {
 
@@ -37,7 +38,7 @@ public class UserService {
                 throw new IllegalArgumentException("Old password is invalid!");
 
             if (passwordEncoder.matches(newPassword, user.getPassword())) {
-                throw new IllegalArgumentException("New password cannot be the same as the ");
+                throw new IllegalArgumentException("New password cannot be the same as the old one");
             }
             user.setPassword(passwordEncoder.encode(newPassword));
         }

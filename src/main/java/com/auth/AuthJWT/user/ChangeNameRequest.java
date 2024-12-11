@@ -13,6 +13,7 @@ import java.util.Optional;
 public class ChangeNameRequest {
     private String newFirstName;
     private String newLastName;
+    private Role role;
     private Optional<String> newPassword;
     private Optional<String> oldPassword;
     private String email;
