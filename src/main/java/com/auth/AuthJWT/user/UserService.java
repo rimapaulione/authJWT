@@ -7,8 +7,6 @@ import com.auth.AuthJWT.token.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,7 +44,6 @@ public class UserService {
     }
 
     public UserByIdResponse getUserById(UUID id ){
-        System.out.println(id);
         User user = repository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("User does not exist"));
 

@@ -1,5 +1,6 @@
 package com.auth.AuthJWT.config;
 
+import com.auth.AuthJWT.auth.CustomAuthenticationEntryPoint;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ public class SecurityConfiguration {
    private final JwtAuthenticationFilter jwtAuthenticationFilter;
    private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,6 +49,12 @@ public class SecurityConfiguration {
                                     response.setStatus(HttpServletResponse.SC_OK);
                                     response.getWriter().write("{\"message\": \"Logout successful\"}");
                                 })
+                )
+                .exceptionHandling((exceptions) -> exceptions
+                        .defaultAuthenticationEntryPointFor(
+                                customAuthenticationEntryPoint,
+                                request -> true // Apply entry point for all requests
+                        )
                 );
 
 

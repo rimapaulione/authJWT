@@ -44,8 +44,8 @@ public class AuthenticationService {
                 .build();
 
         var savedUser = userRepository.save(user);
-
-        VerificationToken verificationToken = verificationTokenService.createVerificationToken(savedUser.getEmail());
+        VerificationToken verificationToken = verificationTokenService
+                .createVerificationToken(savedUser.getEmail());
 
         return AuthenticationResponse.builder()
                 .id(user.getId())
@@ -70,7 +70,8 @@ public class AuthenticationService {
                 .orElseThrow(() -> new UserNotFoundException("User does not exist"));
 
         if (user.getVerified() == null) {
-            VerificationToken verificationToken = verificationTokenService.createVerificationToken(user.getEmail());
+            VerificationToken verificationToken = verificationTokenService
+                    .createVerificationToken(user.getEmail());
             var verToken = verificationToken.getToken();
             throw new UserNotVerifiedException("Not verified " + verToken + " " + user.getEmail());
         }
