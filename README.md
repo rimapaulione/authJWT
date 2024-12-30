@@ -11,6 +11,17 @@ This project demonstrates the implementation of security using Spring Boot 3.0 a
 * BCrypt
 * Maven
 
+## Main Endpoints
+* POST/api/verification/create
+* GET/api/verification/verify
+* PATCH/api/users/user/change
+* POST/api/users/user/id
+* POST/api/reset/create
+* POST/api/reset/verify
+* POST/api/auth/register
+* POST/api/auth/authentication
+* POST/api/auth/login
+
 ## Getting Started
 To get started with this project, you will need to have the following installed on your local machine:
 * JDK 17+
