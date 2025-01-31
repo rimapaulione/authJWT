@@ -1,0 +1,21 @@
+services:
+  postgres:
+    container_name: postgres-sql
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:/Users/ignaspaulionis/Documents/Java/AuthJWT/docker-compose.yml
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres:
+
+networks:
+  postgres:
