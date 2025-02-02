@@ -1,12 +1,16 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/demo
+    url: jdbc:postgresql://db:5432/demo
     username: postgres
     password: Password123
     driver-class-name: org.postgresql.Driver
-
+    hikari:
+      connection-timeout: 30000
+      validation-timeout: 5000
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update  # Change to 'none' if using migrations
+      ddl-auto: update
     show-sql: true
+server:
+  port: 8080

@@ -5,6 +5,7 @@ import com.auth.AuthJWT.exeption.UserNotFoundException;
 import com.auth.AuthJWT.token.Token;
 import com.auth.AuthJWT.token.TokenRepository;
 import lombok.RequiredArgsConstructor;
+import com.auth.AuthJWT.user.ChangeNameRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;

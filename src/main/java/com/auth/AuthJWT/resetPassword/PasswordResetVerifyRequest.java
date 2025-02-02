@@ -14,5 +14,15 @@ public class PasswordResetVerifyRequest {
     private String password;
     private String oldPassword;
 
+    public String getOldPassword() {
+        return oldPassword;
+    }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public String getToken() {
+        return token;
+    }
 }
