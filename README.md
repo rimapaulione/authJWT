@@ -28,8 +28,9 @@ This project demonstrates the implementation of security using Spring Boot 3.0 a
 To get started with this project, you will need to have the following installed on your local machine:
 * JDK 17+
 * Maven 3+
-  Ensure PostgreSQL is running locally and update application.yml with your database credentials.
+  Ensure PostgreSQL is running locally and update application.yml with your database credentials. Command: mvn spring-boot:run
 
-Also you can run the application using Docker Compose: comand: docker-compose up --build
+
+Also you can run the application using Docker Compose: command: docker-compose up --build
 
 -> The application will be available at http://localhost:8080.
