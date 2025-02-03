@@ -8,6 +8,8 @@ This project demonstrates the implementation of security using Spring Boot 3.0 a
 * Spring Boot 3.0
 * Spring Security
 * JSON Web Tokens (JWT)
+* PostgreSQL (for local development)
+* Docker & Docker Compose
 * BCrypt
 * Maven
 
@@ -26,6 +28,8 @@ This project demonstrates the implementation of security using Spring Boot 3.0 a
 To get started with this project, you will need to have the following installed on your local machine:
 * JDK 17+
 * Maven 3+
+  Ensure PostgreSQL is running locally and update application.yml with your database credentials.
 
+Also you can run the application using Docker Compose: comand: docker-compose up --build
 
 -> The application will be available at http://localhost:8080.
