@@ -2,7 +2,6 @@
 This project demonstrates the implementation of security using Spring Boot 3.0 and JSON Web Tokens (JWT). For learning purposes, I have also experimented with Docker Compose.
 
 It includes:
-
 * User registration and login with JWT authentication
 * Password encryption using BCrypt
 
